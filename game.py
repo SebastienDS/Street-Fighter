@@ -5,6 +5,7 @@ import os
 import Player
 import IA
 import Interface
+import Music
 from setting import setting
 
 
@@ -18,6 +19,7 @@ def main():
 #---------------------------------------------- instanciation onjets ----------------------------------------------------------------------------------------
 
 	interface = Interface.Interface(ecran)
+	music = Music.Music()
 
 #-------------------------------------------------- boucle du jeu --------------------------------------------------------------------------------------------
 
@@ -31,6 +33,7 @@ def main():
 	menu_fin_partie = False
 
 	while continuer:
+		music.play_background("son/6FH.wav")
 		while menu_principal:
 			for event in pygame.event.get():					#recupere les evenements
 				if event.type == pygame.QUIT:
@@ -52,7 +55,7 @@ def main():
 			interface.menu_principal()
 			pygame.display.flip()
 
-
+		music.play_background("son/6EH.wav")
 		while menu_choix_mode:
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
@@ -81,7 +84,7 @@ def main():
 			interface.menu_choix_mode()
 			pygame.display.flip()
 
-
+		music.play_background("son/6BH.wav")
 		while selecteur_perso:
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
@@ -139,7 +142,7 @@ def main():
 				interface.init_ia = True
 			pygame.display.flip()
 
-
+		music.play_background("son/4DH.wav")
 		if init_player:	
 			if mode == "1v1":
 				joueur1 = Player.Player(ecran, interface.choix_perso_joueur[0], 1, setting["speed"], (0,0,255))
@@ -153,6 +156,8 @@ def main():
 			init_player = False
 			interface.timer_debut_partie(joueur1, joueur2)
 			pygame.event.clear()
+			music.play_son("fight")
+
 
 		while mode:
 			for event in pygame.event.get():					
