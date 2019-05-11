@@ -145,12 +145,12 @@ def main():
 		music.play_background("son/4DH.wav")
 		if init_player:	
 			if mode == "1v1":
-				joueur1 = Player.Player(ecran, interface.choix_perso_joueur[0], 1, setting["speed"], (0,0,255))
-				joueur2 = Player.Player(ecran, interface.choix_perso_joueur[1], 2, setting["speed"], (255,0,0))
+				joueur1 = Player.Player(ecran, interface.choix_perso_joueur[0], 1, setting["speed"], (0,0,255), music)
+				joueur2 = Player.Player(ecran, interface.choix_perso_joueur[1], 2, setting["speed"], (255,0,0), music)
 				init_player = False
 			elif mode == "1vsIA":
-				joueur1 = Player.Player(ecran, interface.choix_perso_joueur[0], 1, setting["speed"], (0,0,255))
-				joueur2 = IA.IA(ecran, interface.choix_perso_joueur[1], 2, setting["speed"], (255,0,0))
+				joueur1 = Player.Player(ecran, interface.choix_perso_joueur[0], 1, setting["speed"], (0,0,255), music)
+				joueur2 = IA.IA(ecran, interface.choix_perso_joueur[1], 2, setting["speed"], (255,0,0), music)
 			interface = Interface.Interface(ecran)
 			interface.transition((255,255,255))
 			init_player = False
