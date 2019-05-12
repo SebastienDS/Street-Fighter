@@ -5,9 +5,8 @@ from setting import setting
 from hit_box import hit_box
 
 class Player:
-	def __init__(self, ecran, nom, num_joueur, speed, couleur, son):
+	def __init__(self, ecran, nom, num_joueur, speed, couleur):
 		self.ecran = ecran
-		self.son = son
 		self.num_joueur = num_joueur
 		self.nom = nom
 		self.couleur = couleur
@@ -357,7 +356,6 @@ class Player:
 				self.jump_punch()
 			elif self.test_action() and self.position == "crouch":
 				self.crouch_l_punch()
-			self.son.play_son("attaque")
 		elif self.action == "l_kick":
 			if self.test_action() and self.position == "idle":
 				self.l_kick()
@@ -365,8 +363,6 @@ class Player:
 				self.jump_l_kick()
 			elif self.test_action() and self.position == "crouch":
 				self.crouch_h_kick()
-			self.son.play_son("attaque2")
-
 
 
 #------------------------------------------------------- ACTION DU JOUEUR ----------------------------------------------------------------------------------------------------

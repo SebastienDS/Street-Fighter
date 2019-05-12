@@ -1,11 +1,12 @@
 import pygame
 import time
 import os
+import random
 
 import Player
 import IA
 import Interface
-import Music
+import son
 from setting import setting
 
 
@@ -19,7 +20,6 @@ def main():
 #---------------------------------------------- instanciation onjets ----------------------------------------------------------------------------------------
 
 	interface = Interface.Interface(ecran)
-	music = Music.Music()
 
 #-------------------------------------------------- boucle du jeu --------------------------------------------------------------------------------------------
 
@@ -33,13 +33,19 @@ def main():
 	menu_fin_partie = False
 
 	while continuer:
-		music.play_background("son/6FH.wav")
+		pygame.mixer.music.load(son.son["background"]["opening_theme"])
+		pygame.mixer.music.play(-1)
 		while menu_principal:
 			for event in pygame.event.get():					#recupere les evenements
 				if event.type == pygame.QUIT:
 					continuer = False
 					menu_principal = False
-
+				if event.type == pygame.KEYDOWN:
+					if event.key == son.son["volume"]["volume_up"]:
+						son.modif_volume(0.1)
+					elif event.key == son.son["volume"]["volume_down"]:
+						son.modif_volume(-0.1)
+						
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					if event.button == 1: 
 						try:	
@@ -55,7 +61,7 @@ def main():
 			interface.menu_principal()
 			pygame.display.flip()
 
-		music.play_background("son/6EH.wav")
+
 		while menu_choix_mode:
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
@@ -84,7 +90,9 @@ def main():
 			interface.menu_choix_mode()
 			pygame.display.flip()
 
-		music.play_background("son/6BH.wav")
+
+		pygame.mixer.music.load(son.son["background"]["character_select"])
+		pygame.mixer.music.play(-1)
 		while selecteur_perso:
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
@@ -142,22 +150,29 @@ def main():
 				interface.init_ia = True
 			pygame.display.flip()
 
-		music.play_background("son/4DH.wav")
+
 		if init_player:	
 			if mode == "1v1":
-				joueur1 = Player.Player(ecran, interface.choix_perso_joueur[0], 1, setting["speed"], (0,0,255), music)
-				joueur2 = Player.Player(ecran, interface.choix_perso_joueur[1], 2, setting["speed"], (255,0,0), music)
+				joueur1 = Player.Player(ecran, interface.choix_perso_joueur[0], 1, setting["speed"], (0,0,255))
+				joueur2 = Player.Player(ecran, interface.choix_perso_joueur[1], 2, setting["speed"], (255,0,0))
 				init_player = False
 			elif mode == "1vsIA":
-				joueur1 = Player.Player(ecran, interface.choix_perso_joueur[0], 1, setting["speed"], (0,0,255), music)
-				joueur2 = IA.IA(ecran, interface.choix_perso_joueur[1], 2, setting["speed"], (255,0,0), music)
+				joueur1 = Player.Player(ecran, interface.choix_perso_joueur[0], 1, setting["speed"], (0,0,255))
+				joueur2 = IA.IA(ecran, interface.choix_perso_joueur[1], 2, setting["speed"], (255,0,0))
 			interface = Interface.Interface(ecran)
 			interface.transition((255,255,255))
 			init_player = False
 			interface.timer_debut_partie(joueur1, joueur2)
 			pygame.event.clear()
-			music.play_son("fight")
 
+			pygame.mixer.music.fadeout(250)
+			musique = pygame.mixer.Sound(son.son["map"][random.choice(list(son.son["map"].keys()))])
+		
+		try:
+			musique.set_volume(son.son["volume"]["volume"])
+			musique.play()
+		except:
+			pass
 
 		while mode:
 			for event in pygame.event.get():					
@@ -204,6 +219,11 @@ def main():
 					interface.transition(joueur1.couleur)
 				else:
 					interface.transition(joueur2.couleur)
+		try:
+			musique.fadeout(250)
+		except:
+			pass
+		pygame.mixer.music.play(-1)
 
 
 		while menu_pause:
@@ -226,6 +246,8 @@ def main():
 			pygame.display.flip()
 
 
+		pygame.mixer.music.load(son.son["background"]["ending_theme"])
+		pygame.mixer.music.play(-1)
 		while menu_fin_partie:
 			for event in pygame.event.get():					#recupere les evenements
 				if event.type == pygame.QUIT:
