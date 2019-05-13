@@ -3,7 +3,7 @@ import pygame
 
 son = {
 	"volume": {
-		"volume": 1.0,
+		"volume": 0.0,
 		"volume_up": pygame.K_KP_PLUS,
 		"volume_down": pygame.K_KP_MINUS,
 	},

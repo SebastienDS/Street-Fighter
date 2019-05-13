@@ -20,6 +20,7 @@ def main():
 #---------------------------------------------- instanciation onjets ----------------------------------------------------------------------------------------
 
 	interface = Interface.Interface(ecran)
+	pygame.mixer.music.set_volume(son.son["volume"]["volume"])
 
 #-------------------------------------------------- boucle du jeu --------------------------------------------------------------------------------------------
 
@@ -33,8 +34,9 @@ def main():
 	menu_fin_partie = False
 
 	while continuer:
-		pygame.mixer.music.load(son.son["background"]["opening_theme"])
-		pygame.mixer.music.play(-1)
+		if menu_principal:
+			pygame.mixer.music.load(son.son["background"]["opening_theme"])
+			pygame.mixer.music.play(-1)
 		while menu_principal:
 			for event in pygame.event.get():					#recupere les evenements
 				if event.type == pygame.QUIT:
@@ -67,11 +69,17 @@ def main():
 				if event.type == pygame.QUIT:
 					menu_choix_mode = False
 					continuer = False
+					
 
 				if event.type == pygame.KEYDOWN:
+					if event.key == son.son["volume"]["volume_up"]:
+						son.modif_volume(0.1)
+					elif event.key == son.son["volume"]["volume_down"]:
+						son.modif_volume(-0.1)
 					if event.key == pygame.K_ESCAPE:
 						menu_choix_mode = False
 						menu_principal = True
+
 
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					if event.button == 1:
@@ -90,9 +98,9 @@ def main():
 			interface.menu_choix_mode()
 			pygame.display.flip()
 
-
-		pygame.mixer.music.load(son.son["background"]["character_select"])
-		pygame.mixer.music.play(-1)
+		if selecteur_perso:
+			pygame.mixer.music.load(son.son["background"]["character_select"])
+			pygame.mixer.music.play(-1)
 		while selecteur_perso:
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
@@ -101,6 +109,10 @@ def main():
 					mode = False
 
 				if event.type == pygame.KEYDOWN:
+					if event.key == son.son["volume"]["volume_up"]:
+						son.modif_volume(0.1)
+					elif event.key == son.son["volume"]["volume_down"]:
+						son.modif_volume(-0.1)
 					if event.key == pygame.K_ESCAPE:
 						selecteur_perso = False
 						menu_choix_mode = True
@@ -131,7 +143,7 @@ def main():
 										if interface.validation[1]:
 											interface.validation[1] = False
 						except Exception as e:
-							pass
+							print(e)
 						try:
 							if interface.validation_finale.collidepoint(event.pos):
 								selecteur_perso = False
@@ -165,15 +177,14 @@ def main():
 			interface.timer_debut_partie(joueur1, joueur2)
 			pygame.event.clear()
 
-			pygame.mixer.music.fadeout(250)
 			musique = pygame.mixer.Sound(son.son["map"][random.choice(list(son.son["map"].keys()))])
-		
-		try:
-			musique.set_volume(son.son["volume"]["volume"])
-			musique.play()
-		except:
-			pass
-
+		if mode:
+			try:
+				pygame.mixer.music.fadeout(250)
+				musique.set_volume(son.son["volume"]["volume"])
+				musique.play()
+			except Exception as e:
+				print(e)
 		while mode:
 			for event in pygame.event.get():					
 				if event.type == pygame.QUIT:
@@ -181,6 +192,12 @@ def main():
 					mode = False
 
 				elif event.type == pygame.KEYDOWN:
+					if event.key == son.son["volume"]["volume_up"]:
+						son.modif_volume(0.1)
+						musique.set_volume(son.son["volume"]["volume"])
+					elif event.key == son.son["volume"]["volume_down"]:
+						son.modif_volume(-0.1)
+						musique.set_volume(son.son["volume"]["volume"])
 					if event.key in [setting["touche_joueur1"]["pause"], setting["touche_joueur2"]["pause"]]:
 						menu_pause = True
 						mode = False
@@ -221,16 +238,22 @@ def main():
 					interface.transition(joueur2.couleur)
 		try:
 			musique.fadeout(250)
-		except:
-			pass
-		pygame.mixer.music.play(-1)
+		except Exception as e:
+			print(e)
 
 
+		if menu_pause:	
+			pygame.mixer.music.play(-1)
 		while menu_pause:
 			for event in pygame.event.get():					
 				if event.type == pygame.QUIT:
 					continuer = False
 					menu_pause = False
+				if event.type == pygame.KEYDOWN:
+					if event.key == son.son["volume"]["volume_up"]:
+						son.modif_volume(0.1)
+					elif event.key == son.son["volume"]["volume_down"]:
+						son.modif_volume(-0.1)
 
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					if event.button == 1:
@@ -246,8 +269,9 @@ def main():
 			pygame.display.flip()
 
 
-		pygame.mixer.music.load(son.son["background"]["ending_theme"])
-		pygame.mixer.music.play(-1)
+		if menu_fin_partie:
+			pygame.mixer.music.load(son.son["background"]["ending_theme"])
+			pygame.mixer.music.play(-1)
 		while menu_fin_partie:
 			for event in pygame.event.get():					#recupere les evenements
 				if event.type == pygame.QUIT:
@@ -255,6 +279,10 @@ def main():
 					continuer = False
 
 				if event.type == pygame.KEYDOWN:
+					if event.key == son.son["volume"]["volume_up"]:
+						son.modif_volume(0.1)
+					elif event.key == son.son["volume"]["volume_down"]:
+						son.modif_volume(-0.1)
 					if event.key == pygame.K_ESCAPE:
 						menu_fin_partie = False
 						menu_principal = True
