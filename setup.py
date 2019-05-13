@@ -1,6 +1,6 @@
 from cx_Freeze import setup, Executable
 
-buildOptions = dict(include_files = ['image/', 'hit_box/']) 
+buildOptions = dict(include_files = ['image/', 'hit_box/', 'son/']) 
 
 
 setup(
