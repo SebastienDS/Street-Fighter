@@ -34,7 +34,7 @@ def main():
 	menu_fin_partie = False
 
 	while continuer:
-		if menu_principal:
+		if menu_principal or menu_choix_mode:
 			pygame.mixer.music.load(son.son["background"]["opening_theme"])
 			pygame.mixer.music.play(-1)
 		while menu_principal:
@@ -178,12 +178,13 @@ def main():
 			interface.timer_debut_partie(joueur1, joueur2)
 			pygame.event.clear()
 
-			musique = pygame.mixer.Sound(son.son["map"][random.choice(list(son.son["map"].keys()))])
+			musique = son.son["map"][random.choice(list(son.son["map"].keys()))]
 		if mode:
 			try:
 				pygame.mixer.music.fadeout(250)
-				musique.set_volume(son.son["volume"]["volume"])
-				musique.play()
+				pygame.mixer.music.load(musique)
+				pygame.mixer.music.set_volume(son.son["volume"]["volume"])
+				pygame.mixer.music.play()
 			except Exception as e:
 				print(e)
 		while mode:
@@ -239,12 +240,13 @@ def main():
 				else:
 					interface.transition(joueur2.couleur)
 		try:
-			musique.fadeout(250)
+			pygame.mixer.music.fadeout(250)
 		except Exception as e:
 			print(e)
 
 
 		if menu_pause:	
+			pygame.mixer.music.load(son.son["background"]["character_select"])
 			pygame.mixer.music.play(-1)
 		while menu_pause:
 			for event in pygame.event.get():					
