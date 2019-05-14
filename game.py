@@ -174,6 +174,7 @@ def main():
 			interface = Interface.Interface(ecran)
 			interface.transition((255,255,255))
 			init_player = False
+			pygame.mixer.music.fadeout(250)
 			interface.timer_debut_partie(joueur1, joueur2)
 			pygame.event.clear()
 
@@ -210,6 +211,7 @@ def main():
 			
 			joueur1.update_hit_box(joueur2)
 			joueur2.update_hit_box(joueur1)
+			
 			joueur1.gerer_degat(joueur2)
 			joueur2.gerer_degat(joueur1)
 			joueur1.reset_combo()

@@ -15,7 +15,7 @@ X	menu choix perso
 /	menu fin de partie 
 X		ajouter image perso sur lecran + encadré le vainqueur
 X	IA
-	son
+/	son
 	animations (X)
 	ajouter de nouvelles attaques
 4	ajouter nouveaux perso

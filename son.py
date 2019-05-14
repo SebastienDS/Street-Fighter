@@ -3,7 +3,7 @@ import pygame
 
 son = {
 	"volume": {
-		"volume": 0.0,
+		"volume": 0.5,
 		"volume_up": pygame.K_KP_PLUS,
 		"volume_down": pygame.K_KP_MINUS,
 	},
@@ -19,6 +19,13 @@ son = {
 		"Guile_stage": "son/map/Guile_stage.wav",
 		"Ken_stage": "son/map/Ken_stage.wav",
 		"Ryu_stage": "son/map/Ryu_stage.wav",
+	},
+
+	"compteur": {
+		"fight": "son/56H.wav",
+		"compteur1": "son/60H.wav",
+		"compteur2": "son/61H.wav",
+		"compteur3": "son/62H.wav",
 	},
 }
 
