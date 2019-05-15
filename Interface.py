@@ -1,6 +1,7 @@
 import pygame
 import time
 import random
+import son
 from setting import setting
 
 class Interface:
@@ -357,12 +358,24 @@ class Interface:
 
 	def timer_debut_partie(self, joueur1, joueur2):
 		temps = 3
+		son_compteur = pygame.mixer.Sound(son.son["compteur"]["compteur" + str(temps)])
+		son_compteur.set_volume(son.son["volume"]["volume"])
+		son_compteur.play()
 		while temps >= 0:
 			if time.time() - self.debut > 1:
 				self.debut = time.time()
 				t_temps = self.font_menu.render(str(temps), 1, (0,0,0))
 				r_temps = t_temps.get_rect()
 				r_temps.center = self.ecran.get_rect().center
+				try:
+					son_compteur = pygame.mixer.Sound(son.son["compteur"]["compteur" + str(temps)])
+					son_compteur.set_volume(son.son["volume"]["volume"])
+					son_compteur.play()
+				except Exception as e:
+					print(e)
+					son_compteur = pygame.mixer.Sound(son.son["compteur"]["fight"])
+					son_compteur.set_volume(son.son["volume"]["volume"])
+					son_compteur.play()
 				temps -= 1
 
 				self.draw_bg()

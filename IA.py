@@ -62,7 +62,7 @@ class IA(Player.Player):
 		if joueur.premiere_attaque:
 			if joueur.action:
 				if self.tester_toucher(joueur):
-					if random.randrange(100) < 50:					
+					if random.randrange(100) < 40:					
 						if joueur.position == "idle":
 							if joueur.action == "h_punch":
 								self.action = "blocking"
@@ -76,9 +76,9 @@ class IA(Player.Player):
 								self.position = "crouch"
 								self.action = "blocking"
 			elif self.tester_degat(joueur):
-				#if random.randbrange(100) < 75:
-				self.action = list(self.ordre_attaque_hit_box.keys())[list(self.ordre_attaque_hit_box.values()).index(self.attaque_touche)][2:]
-				self.demander_attaque(self.action)
+				if random.randrange(100) < 20:
+					self.action = list(self.ordre_attaque_hit_box.keys())[list(self.ordre_attaque_hit_box.values()).index(self.attaque_touche)][2:]
+					self.demander_attaque(self.action)
 			else:
 				self.action = None
 
@@ -86,4 +86,9 @@ class IA(Player.Player):
 	def update_hit_box(self, joueur):
 		super().update_hit_box(joueur)
 		self.intercepter_input(joueur)
+		if self.action == "blocking" and self.position == "idle":
+			self.blocking_up()
+		elif self.action == "blocking" and self.position == "crouch":
+			self.blocking_crouch()
 		super().update_hit_box(joueur)
+
