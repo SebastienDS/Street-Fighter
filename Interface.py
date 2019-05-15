@@ -422,3 +422,22 @@ class Interface:
 
 			self.ecran.blit(combo, self.rect_combo)
 
+
+	def icone_map(self):
+		self.icone_map = {}
+		for key in self.image_map.keys():
+			self.icone_map[key] = pygame.transform.scale(self.image_map[key], [setting["l_ecran"] // 5, int((setting["l_ecran"] * 448) / 1242) // 5])
+
+
+	def choix_map(self):
+		self.rect_map = []
+		for i in range(len(self.icone_map.keys())):
+			rect = self.icone_map["map" + str(i + 1)].get_rect()
+			rect.x = i * 100 + 30
+			rect.y = i * 1.3 * self.icone_map["map" + str(i + 1)].get_rect().centery + 30
+			self.rect_map.append(rect)
+
+			self.ecran.blit(self.icone_map["map" + str(i + 1)], rect)
+
+
+	
