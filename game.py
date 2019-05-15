@@ -175,6 +175,8 @@ def main():
 		interface.icone_map()
 		while choix_map:
 			ecran.fill((0,0,0))
+			interface.choix_map()
+			
 			for event in pygame.event.get():					#recupere les evenements
 				if event.type == pygame.QUIT:
 					continuer = False
@@ -184,15 +186,14 @@ def main():
 
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					if event.button == 1: 
-						try:	
-							for i in range(len(interface.rect_map)):
-								if interface.rect_map[i].collidepoint(event.pos):
-									interface.num_map = i + 1
-						except Exception as e:
-							print(e)
-
-			interface.choix_map()
+							
+						for i in range(len(interface.rect_map)-1, -1, -1):
+							if interface.rect_map[i].collidepoint(event.pos):
+								interface.num_map = i + 1
+								
 			pygame.display.flip()
+
+			
 
 
 		if init_timer_debut:
