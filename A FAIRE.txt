@@ -20,8 +20,6 @@ X	IA
 	ajouter de nouvelles attaques
 4	ajouter nouveaux perso
 
-	TUTORIEL ??  <==
-
 
 	barre de vie: 
 X		-barre de vie trop basse a 0
@@ -30,6 +28,10 @@ X		 => si attaque entre temps => reset la barre de degat pris + augmentation des
 
 X	position de demarrage + timer de debut de match ?
 X	position de fin a la place du sleep
+
+
+	TUTORIEL 			<===============
+	REPLAY DE LA PARTIE <===============
 
 
 
