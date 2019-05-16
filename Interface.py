@@ -433,7 +433,7 @@ class Interface:
 		self.rect_map = []
 		for i in range(len(self.icone_map.keys())):
 			rect = self.icone_map["map" + str(i + 1)].get_rect()
-			rect.x = i * 100 + 30
+			rect.x = i * 175 + 30
 			rect.y = i * 1.3 * self.icone_map["map" + str(i + 1)].get_rect().centery + 30
 			self.rect_map.append(rect)
 
