@@ -395,7 +395,7 @@ class Interface:
 			if time.time() - debut > 0.5:
 				debut = time.time()
 				temps -= 1
-				t_fin = self.font_menu.render("partie termine", 1, (255,0,128))
+				t_fin = self.font_menu.render("partie terminee", 1, (255,0,128))
 				r_fin = t_fin.get_rect()
 				r_fin.center = self.ecran.get_rect().center
 				r_fin.y -= 50
