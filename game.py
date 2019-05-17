@@ -171,26 +171,35 @@ def main():
 			interface.transition((255,255,255))
 			init_player = False
 
-
-		interface.icone_map()
+		if choix_map:
+			interface.icone_map()
 		while choix_map:
-			ecran.fill((0,0,0))
-			interface.choix_map()
-			
 			for event in pygame.event.get():					#recupere les evenements
 				if event.type == pygame.QUIT:
-					continuer = False
-					choix_map = False
-					init_timer_debut = True
 					sys.exit()
+				if event.type == pygame.KEYDOWN:
+					if event.key == son.son["volume"]["volume_up"]:
+						son.modif_volume(0.1)
+					elif event.key == son.son["volume"]["volume_down"]:
+						son.modif_volume(-0.1)
 
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					if event.button == 1: 
-							
 						for i in range(len(interface.rect_map)-1, -1, -1):
 							if interface.rect_map[i].collidepoint(event.pos):
 								interface.num_map = i + 1
-								
+						try:
+							if interface.num_map and interface.validation_finale_map.collidepoint(event.pos):
+								choix_map = False
+								init_timer_debut = True
+						except Exception as e:
+							print(e)
+
+			ecran.fill((0,0,0))
+			interface.choix_map()
+			interface.afficher_choix_map()	
+			interface.afficher_icone_map_choisie()	
+			interface.validation_map()		
 			pygame.display.flip()
 
 			
