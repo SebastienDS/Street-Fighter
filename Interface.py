@@ -11,7 +11,7 @@ class Interface:
 		self.logo_perso = {}
 		self.rect_logo = {}
 		self.image_active = None
-		self.num_map = 1
+		self.num_map = None
 		self.timer = 120
 		self.debut = time.time()
 		self.myfont = pygame.font.Font("image/police.ttf", 70)
@@ -422,3 +422,60 @@ class Interface:
 
 			self.ecran.blit(combo, self.rect_combo)
 
+
+	def icone_map(self):
+		self.icone_map = {}
+		for key in self.image_map.keys():
+			self.icone_map[key] = pygame.transform.scale(self.image_map[key], [setting["l_ecran"] // 5, int((setting["l_ecran"] * 448) / 1242) // 5])
+
+
+	def choix_map(self):
+		self.rect_map = []
+		for i in range(len(self.icone_map.keys())):
+			rect = self.icone_map["map" + str(i + 1)].get_rect()
+			rect.x = i * 175 + 30
+			rect.y = i * 1.3 * self.icone_map["map" + str(i + 1)].get_rect().centery + 30
+			self.rect_map.append(rect)
+			cadre_map = self.icone_map["map" + str(i + 1)].get_rect()
+			cadre_map.x = i * 175 + 30 - 2
+			cadre_map.y = i * 1.3 * self.icone_map["map" + str(i + 1)].get_rect().centery + 30 - 2
+			cadre_map.width += 4
+			cadre_map.height += 4
+			
+			if self.num_map == i + 1:
+				pygame.draw.rect(self.ecran, (0,255,0), cadre_map)
+			self.ecran.blit(self.icone_map["map" + str(i + 1)], rect)
+
+
+	def afficher_choix_map(self):
+		rect_ecran = self.ecran.get_rect()
+		choix_map_txt = self.font_menu.render("choix map", 1, (255,255,255))
+		self.rect_choix_map = choix_map_txt.get_rect()
+		self.rect_choix_map.x = 100
+		self.rect_choix_map.bottom = rect_ecran.bottom - 50
+		self.ecran.blit(choix_map_txt, self.rect_choix_map)
+
+
+	def afficher_icone_map_choisie(self): 
+		if self.num_map:
+			map_choisie = self.icone_map["map" + str(self.num_map)]
+			rect = map_choisie.get_rect()
+			map_zoomed = pygame.transform.scale(map_choisie, (rect.width * 2, rect.height * 2))
+			rect_map = map_zoomed.get_rect()
+			rect_map.right = self.ecran.get_rect().right - 10
+			rect_map.y = 10
+			self.ecran.blit(map_zoomed, rect_map)
+
+
+	def validation_map(self):
+		if self.num_map:
+			valider = self.myfont.render("OK", 1, (0,255,0))
+			self.validation_finale_map = valider.get_rect()
+			self.validation_finale_map.right = self.ecran.get_rect().right - 90
+			self.validation_finale_map.y = 200
+			self.ecran.blit(valider, self.validation_finale_map)
+			pygame.draw.rect(self.ecran, (0,255,0), self.validation_finale_map, 1)
+
+
+
+	
