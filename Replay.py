@@ -12,7 +12,7 @@ class Replay:
 			"position": [],
 			"action": [],
 			"last_direction": [],
-			
+
 		}
 		self.data_player2 = {
 			"posX": [],
@@ -25,17 +25,24 @@ class Replay:
 		}
 
 
-	def save_replay(self, name_file):
-		data = [self.data_player1, self.data_player2]
+	def save_replay(self, name_file, num_map, nom1, nom2):
+		data = [self.data_player1, self.data_player2, num_map, nom1, nom2]
 		with open("Replay/" + name_file, "wb") as file:
 			pickle.dump(data, file)
 
 
-	def load_replay(self, name_file):
+	def load_replay(self, name_file, interface, joueur1, joueur2):
 		with open("Replay/" + name_file, "rb") as file:
 			data = pickle.load(file)
 		self.data_player1 = data[0]
 		self.data_player2 = data[1]
+		interface.num_map = data[2]
+		interface.init_interface()
+		joueur1.nom = data[3]
+		joueur1.init_perso()
+		joueur2.nom = data[4]
+		joueur2.init_perso()
+
 
 
 	def add_data(self, player1, player2):

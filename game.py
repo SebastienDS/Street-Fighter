@@ -221,8 +221,8 @@ def main():
 				pygame.mixer.music.play()
 			except Exception as e:
 				print(e)
-		
-		replay.load_replay("test")
+
+		replay.load_replay("test", interface, joueur1, joueur2)
 		while mode:
 			for event in pygame.event.get():					
 				if event.type == pygame.QUIT:
@@ -270,7 +270,7 @@ def main():
 			pygame.time.Clock().tick(setting["fps"])
 
 			if joueur1.vie <= 0 or joueur2.vie <= 0 or quitter:
-				#replay.save_replay("test")
+				#replay.save_replay("test", interface.num_map, joueur1.nom, joueur2.nom)
 				menu_fin_partie = True
 				mode = False
 
