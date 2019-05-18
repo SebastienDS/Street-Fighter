@@ -7,6 +7,7 @@ import random
 import Player
 import IA
 import Interface
+import Replay
 import son
 from setting import setting
 
@@ -21,6 +22,7 @@ def main():
 #---------------------------------------------- instanciation onjets ----------------------------------------------------------------------------------------
 
 	interface = Interface.Interface(ecran)
+	replay = Replay.Replay()
 	pygame.mixer.music.set_volume(son.son["volume"]["volume"])
 
 #-------------------------------------------------- boucle du jeu --------------------------------------------------------------------------------------------
@@ -185,10 +187,11 @@ def main():
 
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					if event.button == 1: 
-						for i in range(len(interface.rect_map)-1, -1, -1):
-							if interface.rect_map[i].collidepoint(event.pos):
-								interface.num_map = i + 1
 						try:
+							for i in range(len(interface.rect_map)-1, -1, -1):
+								if interface.rect_map[i].collidepoint(event.pos):
+									interface.num_map = i + 1
+					
 							if interface.num_map and interface.validation_finale_map.collidepoint(event.pos):
 								choix_map = False
 								init_timer_debut = True
@@ -203,8 +206,6 @@ def main():
 			pygame.display.flip()
 
 			
-
-
 		if init_timer_debut:
 			interface.transition((255,255,255))
 			pygame.mixer.music.fadeout(250)	
@@ -220,6 +221,8 @@ def main():
 				pygame.mixer.music.play()
 			except Exception as e:
 				print(e)
+		
+		replay.load_replay("test")
 		while mode:
 			for event in pygame.event.get():					
 				if event.type == pygame.QUIT:
@@ -238,9 +241,11 @@ def main():
 				joueur1.input_player(event)
 				joueur2.input_player(event)
 
+			replay.load_data(joueur1, joueur2)
+
 			joueur1.recup_action_active()													
-			joueur2.recup_action_active()	
-			
+			joueur2.recup_action_active()
+
 			joueur1.update_hit_box(joueur2)
 			joueur2.update_hit_box(joueur1)
 			
@@ -248,6 +253,8 @@ def main():
 			joueur2.gerer_degat(joueur1)
 			joueur1.reset_combo()
 			joueur2.reset_combo()
+
+			#replay.add_data(joueur1, joueur2)
 
 			#joueur1.afficher()
 			#joueur2.afficher()
@@ -263,8 +270,10 @@ def main():
 			pygame.time.Clock().tick(setting["fps"])
 
 			if joueur1.vie <= 0 or joueur2.vie <= 0 or quitter:
+				#replay.save_replay("test")
 				menu_fin_partie = True
 				mode = False
+
 				interface.afficher_fin_de_partie(joueur1, joueur2)
 				if joueur1.vie > joueur2.vie:
 					interface.transition(joueur1.couleur)
@@ -274,6 +283,8 @@ def main():
 			pygame.mixer.music.fadeout(250)
 		except Exception as e:
 			print(e)
+
+		
 
 
 		if menu_pause:	
