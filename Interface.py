@@ -109,19 +109,26 @@ class Interface:
 
 		duo = self.font_menu.render("1 vs 1", 1, (0,0,255))
 		self.rect_1v1 = duo.get_rect()
-		self.rect_1v1.x = 200
+		self.rect_1v1.x = 100
 		self.rect_1v1.centery = rect_ecran.centery + 100
 
 		solo = self.font_menu.render("1 vs IA", 1, (0,0,255))
 		self.rect_1vsIA = solo.get_rect()
-		self.rect_1vsIA.right = rect_ecran.right - 200
+		self.rect_1vsIA.centerx = rect_ecran.centerx
 		self.rect_1vsIA.centery = rect_ecran.centery + 100
+
+		replay = self.font_menu.render("replay", 1, (0,0,0))
+		self.rect_replay = replay.get_rect()
+		self.rect_replay.right = rect_ecran.right - 100
+		self.rect_replay.centery = rect_ecran.centery + 100
 
 		pygame.draw.rect(self.ecran, (0,0,0), self.rect_1v1, 2)
 		pygame.draw.rect(self.ecran, (0,0,0), self.rect_1vsIA, 2)
+		pygame.draw.rect(self.ecran, (0,0,0), self.rect_replay, 2)
 		self.ecran.blit(choix, self.rect_choix)
 		self.ecran.blit(duo, self.rect_1v1)
 		self.ecran.blit(solo, self.rect_1vsIA)
+		self.ecran.blit(replay, self.rect_replay)
 
 
 	def menu_pause(self):
@@ -179,17 +186,17 @@ class Interface:
 		self.nom_barre_vie(joueur2, (255,0,0), fond_barre_de_vie2.center)
 
 
-	def fin_de_partie(self, joueur1, joueur2):
+	def fin_de_partie(self, joueur1, joueur2, couleur_save):
 		self.ecran.fill((0,0,0))
 		rect_ecran = self.ecran.get_rect()
 		menu = self.font_menu.render("MENU", 1, (0,255,0))
 		self.rect_menu = menu.get_rect()
-		self.rect_menu.x = 200
+		self.rect_menu.x = 100
 		self.rect_menu.centery = rect_ecran.centery + 125
 
 		quit = self.font_menu.render("QUITTER", 1, (255,0,0))
 		self.rect_quit = quit.get_rect()
-		self.rect_quit.right = rect_ecran.right - 200
+		self.rect_quit.right = rect_ecran.right - 100
 		self.rect_quit.centery = rect_ecran.centery + 125
 
 		pygame.draw.rect(self.ecran, (255,255,255), self.rect_menu, 2)
@@ -228,6 +235,14 @@ class Interface:
 		self.ecran.blit(win, self.rect_win)
 
 		pygame.draw.rect(self.ecran, (0,255,0), joueur_win, 3) 
+
+		save = self.font_menu.render("save", 1, (255,255,255))
+		self.rect_save = save.get_rect()
+		self.rect_save.centerx = rect_ecran.centerx
+		self.rect_save.centery = rect_ecran.centery + 125
+		pygame.draw.rect(self.ecran, couleur_save, self.rect_save, 2)
+		self.ecran.blit(save, self.rect_save)
+
 
 
 	def transition(self, couleur):
@@ -364,7 +379,7 @@ class Interface:
 		while temps >= 0:
 			if time.time() - self.debut > 1:
 				self.debut = time.time()
-				t_temps = self.font_menu.render(str(temps), 1, (0,0,0))
+				t_temps = self.font_menu.render(str(temps), 1, (255,0,128))
 				r_temps = t_temps.get_rect()
 				r_temps.center = self.ecran.get_rect().center
 				try:
@@ -415,7 +430,7 @@ class Interface:
 	def afficher_combo(self, joueur, posx, posy):
 		if joueur.combo > 2:
 			rect_ecran = self.ecran.get_rect()
-			combo = self.myfont.render("combo: " + str(joueur.combo), 1, (0,0,0))
+			combo = self.myfont.render("combo: " + str(joueur.combo), 1, (255,0,128))
 			self.rect_combo = combo.get_rect()
 			self.rect_combo.x = posx
 			self.rect_combo.y = posy
@@ -475,6 +490,57 @@ class Interface:
 			self.validation_finale_map.y = 200
 			self.ecran.blit(valider, self.validation_finale_map)
 			pygame.draw.rect(self.ecran, (0,255,0), self.validation_finale_map, 1)
+
+
+	def afficher_replay(self):
+		replay = self.font_menu.render("Replay", 1, (255,0,128))
+		rect_replay = replay.get_rect()
+		rect_replay.center = self.ecran.get_rect().center
+		rect_replay.y -= 100
+		self.ecran.blit(replay, rect_replay)
+
+
+	def choix_replay(self, replay):
+		if replay.replay_selected:
+			couleur = (0,255,0)
+		else:
+			couleur = (255,255,255)
+		self.ecran.fill((0,0,0))
+		rect_ecran = self.ecran.get_rect()
+		choix_replay = self.font_menu.render("choix replay", 1, (0,255,255))
+		replay1 = self.font_menu.render("replay 1", 1, (255,255,255))
+		replay2 = self.font_menu.render("replay 2", 1, (255,255,255))
+		replay3 = self.font_menu.render("replay 3", 1, (255,255,255))
+		bouton_ok = self.font_barre_vie.render("valider", 1, couleur)
+
+		r_choix_replay = choix_replay.get_rect()
+		self.r_replay1 = replay1.get_rect()
+		self.r_replay2 = replay2.get_rect()
+		self.r_replay3 = replay3.get_rect()
+		self.bouton_ok = bouton_ok.get_rect()
+
+		r_choix_replay.centerx = rect_ecran.centerx
+		r_choix_replay.y = 50
+		self.bouton_ok.centerx = rect_ecran.centerx
+		self.bouton_ok.bottom = rect_ecran.bottom - 35
+
+		for rect_replay in [self.r_replay1, self.r_replay2, self.r_replay3]:
+			rect_replay.centery = rect_ecran.centery + 50
+		self.r_replay1.x = 50
+		self.r_replay2.centerx = rect_ecran.centerx
+		self.r_replay3.right = rect_ecran.right - 50
+
+		pygame.draw.rect(self.ecran, (255,255,255), self.r_replay1, 2)
+		pygame.draw.rect(self.ecran, (255,255,255), self.r_replay2, 2)
+		pygame.draw.rect(self.ecran, (255,255,255), self.r_replay3, 2)
+
+		self.ecran.blit(choix_replay, r_choix_replay)
+		self.ecran.blit(replay1, self.r_replay1)
+		self.ecran.blit(replay2, self.r_replay2)
+		self.ecran.blit(replay3, self.r_replay3)
+
+		pygame.draw.rect(self.ecran, couleur, self.bouton_ok, 2)
+		self.ecran.blit(bouton_ok, self.bouton_ok)
 
 
 

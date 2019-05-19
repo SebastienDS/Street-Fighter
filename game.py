@@ -7,6 +7,7 @@ import random
 import Player
 import IA
 import Interface
+import Replay
 import son
 from setting import setting
 
@@ -21,6 +22,7 @@ def main():
 #---------------------------------------------- instanciation onjets ----------------------------------------------------------------------------------------
 
 	interface = Interface.Interface(ecran)
+	replay = Replay.Replay()
 	pygame.mixer.music.set_volume(son.son["volume"]["volume"])
 
 #-------------------------------------------------- boucle du jeu --------------------------------------------------------------------------------------------
@@ -33,6 +35,8 @@ def main():
 	init_player = False
 	init_timer_debut = False
 	mode = False
+	menu_replay = False
+	choix_replay = False
 	menu_pause = False
 	menu_fin_partie = False
 
@@ -90,6 +94,9 @@ def main():
 								menu_choix_mode = False
 								selecteur_perso = True
 								mode = "1vsIA"
+							elif interface.rect_replay.collidepoint(event.pos):
+								menu_choix_mode = False
+								choix_replay = True
 						except Exception as e:
 							print(e)
 
@@ -168,6 +175,7 @@ def main():
 				joueur1 = Player.Player(ecran, interface.choix_perso_joueur[0], 1, setting["speed"], (0,0,255))
 				joueur2 = IA.IA(ecran, interface.choix_perso_joueur[1], 2, setting["speed"], (255,0,0))
 			interface = Interface.Interface(ecran)
+			replay.reset_data()
 			interface.transition((255,255,255))
 			init_player = False
 
@@ -185,10 +193,11 @@ def main():
 
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					if event.button == 1: 
-						for i in range(len(interface.rect_map)-1, -1, -1):
-							if interface.rect_map[i].collidepoint(event.pos):
-								interface.num_map = i + 1
 						try:
+							for i in range(len(interface.rect_map)-1, -1, -1):
+								if interface.rect_map[i].collidepoint(event.pos):
+									interface.num_map = i + 1
+					
 							if interface.num_map and interface.validation_finale_map.collidepoint(event.pos):
 								choix_map = False
 								init_timer_debut = True
@@ -203,8 +212,6 @@ def main():
 			pygame.display.flip()
 
 			
-
-
 		if init_timer_debut:
 			interface.transition((255,255,255))
 			pygame.mixer.music.fadeout(250)	
@@ -212,6 +219,7 @@ def main():
 			pygame.event.clear()
 
 			musique = son.son["map"][random.choice(list(son.son["map"].keys()))]
+			init_timer_debut = False
 		if mode:
 			try:
 				pygame.mixer.music.fadeout(250)
@@ -220,6 +228,7 @@ def main():
 				pygame.mixer.music.play()
 			except Exception as e:
 				print(e)
+
 		while mode:
 			for event in pygame.event.get():					
 				if event.type == pygame.QUIT:
@@ -238,9 +247,11 @@ def main():
 				joueur1.input_player(event)
 				joueur2.input_player(event)
 
-			joueur1.recup_action_active()													
-			joueur2.recup_action_active()	
 			
+
+			joueur1.recup_action_active()													
+			joueur2.recup_action_active()
+
 			joueur1.update_hit_box(joueur2)
 			joueur2.update_hit_box(joueur1)
 			
@@ -249,6 +260,7 @@ def main():
 			joueur1.reset_combo()
 			joueur2.reset_combo()
 
+			replay.add_data(joueur1, joueur2)
 			#joueur1.afficher()
 			#joueur2.afficher()
 
@@ -265,17 +277,16 @@ def main():
 			if joueur1.vie <= 0 or joueur2.vie <= 0 or quitter:
 				menu_fin_partie = True
 				mode = False
+
 				interface.afficher_fin_de_partie(joueur1, joueur2)
 				if joueur1.vie > joueur2.vie:
 					interface.transition(joueur1.couleur)
 				else:
 					interface.transition(joueur2.couleur)
-		try:
-			pygame.mixer.music.fadeout(250)
-		except Exception as e:
-			print(e)
+		pygame.mixer.music.fadeout(250)
+	
 
-
+	
 		if menu_pause:	
 			pygame.mixer.music.load(son.son["background"]["character_select"])
 			pygame.mixer.music.play(-1)
@@ -303,9 +314,72 @@ def main():
 			pygame.display.flip()
 
 
+		if menu_replay:
+			try:
+				replay.load_replay("replay" + str(replay.replay_selected), interface, joueur1, joueur2)
+			except Exception as e:
+				print(e)
+				joueur1 = Player.Player(ecran, "ken", 1, setting["speed"], (0,0,255))
+				joueur2 = Player.Player(ecran, "ken", 2, setting["speed"], (255,0,0))
+				replay.load_replay("replay" + str(replay.replay_selected), interface, joueur1, joueur2)
+			interface.transition((255,255,255))
+			pygame.mixer.music.fadeout(250)	
+			interface.timer_debut_partie(joueur1, joueur2)
+			pygame.event.clear()
+
+			try:
+				pygame.mixer.music.load(son.son["map"][random.choice(list(son.son["map"].keys()))])
+				pygame.mixer.music.set_volume(son.son["volume"]["volume"])
+				pygame.mixer.music.play()
+			except Exception as e:
+				print(e)	
+		while menu_replay:
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					sys.exit()
+				if event.type == pygame.KEYDOWN:
+					if event.key == son.son["volume"]["volume_up"]:
+						son.modif_volume(0.1)
+					elif event.key == son.son["volume"]["volume_down"]:
+						son.modif_volume(-0.1)
+
+			replay.load_data(joueur1, joueur2)
+			joueur1.recup_action_active()													
+			joueur2.recup_action_active()
+
+			interface.draw_bg()
+			interface.barre_de_vie(joueur1, joueur2)
+			interface.afficher_replay()
+			joueur1.draw()
+			joueur2.draw()
+
+			pygame.display.flip()
+
+			if len(replay.data_player1["posX"]) > 80:
+				pygame.time.Clock().tick(setting["fps"])
+			else:
+				pygame.time.Clock().tick(setting["slow_fps"])
+
+			if joueur1.vie <= 0 or joueur2.vie <= 0:
+				menu_fin_partie = True
+				menu_replay = False
+				replay.replay_selected = None
+
+				interface.afficher_fin_de_partie(joueur1, joueur2)
+				if joueur1.vie > joueur2.vie:
+					interface.transition(joueur1.couleur)
+				else:
+					interface.transition(joueur2.couleur)
+		pygame.mixer.music.fadeout(250)
+
+
 		if menu_fin_partie:
 			pygame.mixer.music.load(son.son["background"]["ending_theme"])
 			pygame.mixer.music.play(-1)
+			if len(replay.data_player1["posX"]):
+				couleur_save = (255,255,255)
+			elif not(replay.data_player1["posX"]):
+				couleur_save = (255,0,0)
 		while menu_fin_partie:
 			for event in pygame.event.get():					#recupere les evenements
 				if event.type == pygame.QUIT:
@@ -331,11 +405,64 @@ def main():
 							elif interface.rect_quit.collidepoint(event.pos):
 								menu_fin_partie = False
 								continuer = False
+
+							elif interface.rect_save.collidepoint(event.pos):
+								if len(replay.data_player1["posX"]):
+									menu_fin_partie = False
+									choix_replay = "save"
+
 						except Exception as e: 
 							print(e)
 
-			interface.fin_de_partie(joueur1, joueur2)
+			interface.fin_de_partie(joueur1, joueur2, couleur_save)
 			pygame.display.flip()
+
+		if choix_replay:
+			pygame.mixer.music.load(son.son["background"]["ending_theme"])
+			pygame.mixer.music.play(-1)
+		while choix_replay:
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					sys.exit()
+				if event.type == pygame.KEYDOWN:
+					if event.key == son.son["volume"]["volume_up"]:
+						son.modif_volume(0.1)
+					elif event.key == son.son["volume"]["volume_down"]:
+						son.modif_volume(-0.1)
+
+					if event.key == pygame.K_ESCAPE:
+						if choix_replay == "save":
+							choix_replay = False
+							menu_fin_partie = True
+						else:
+							choix_replay = False
+							menu_choix_mode = True
+							replay.replay_selected = None
+
+				if event.type == pygame.MOUSEBUTTONDOWN:
+					if event.button == 1:
+						try:
+							if interface.r_replay1.collidepoint(event.pos):
+								replay.replay_selected = 1
+							elif interface.r_replay2.collidepoint(event.pos):
+								replay.replay_selected = 2
+							elif interface.r_replay3.collidepoint(event.pos):
+								replay.replay_selected = 3
+							elif interface.bouton_ok.collidepoint(event.pos) and replay.replay_selected:
+								if choix_replay == "save":
+									replay.save_replay("replay" + str(replay.replay_selected), interface.num_map, joueur1.nom, joueur2.nom)
+									choix_replay = False
+									menu_principal = True
+									replay.replay_selected = None
+								else:
+									choix_replay = False
+									menu_replay = True
+						except Exception as e:
+							print(e)
+
+			interface.choix_replay(replay)
+			pygame.display.flip()
+
 
 
 
