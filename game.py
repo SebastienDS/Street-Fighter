@@ -417,7 +417,9 @@ def main():
 			interface.fin_de_partie(joueur1, joueur2, couleur_save)
 			pygame.display.flip()
 
-
+		if choix_replay:
+			pygame.mixer.music.load(son.son["background"]["ending_theme"])
+			pygame.mixer.music.play(-1)
 		while choix_replay:
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
@@ -427,6 +429,15 @@ def main():
 						son.modif_volume(0.1)
 					elif event.key == son.son["volume"]["volume_down"]:
 						son.modif_volume(-0.1)
+
+					if event.key == pygame.K_ESCAPE:
+						if choix_replay == "save":
+							choix_replay = False
+							menu_fin_partie = True
+						else:
+							choix_replay = False
+							menu_choix_mode = True
+							replay.replay_selected = None
 
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					if event.button == 1:
