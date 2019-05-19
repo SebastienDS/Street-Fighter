@@ -34,7 +34,7 @@ X	position de fin a la place du sleep
 	TUTORIEL 			<===============
 /	REPLAY DE LA PARTIE <===============
 X		-ajouter plusieurs emplacements de sauvegarde + choisir quel replay regarder
-		-ajouter son dans le menu du replay
+X		-ajouter son dans le menu du replay
 
 
 
