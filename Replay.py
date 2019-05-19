@@ -30,8 +30,11 @@ class Replay:
 		with open("Replay/" + name_file, "wb") as file:
 			pickle.dump(data, file)
 
+		self.reset_data()
+
 
 	def load_replay(self, name_file, interface, joueur1, joueur2):
+		self.reset_data()
 		with open("Replay/" + name_file, "rb") as file:
 			data = pickle.load(file)
 		self.data_player1 = data[0]
@@ -42,6 +45,10 @@ class Replay:
 		joueur1.init_perso()
 		joueur2.nom = data[4]
 		joueur2.init_perso()
+
+		joueur1.vie = self.data_player1["vie"][0]
+		joueur2.vie = self.data_player2["vie"][0]
+
 
 
 
@@ -71,3 +78,9 @@ class Replay:
 				player.debut_action = time.time()
 		except:
 			pass
+
+
+	def reset_data(self):
+		for data, key in [(self.data_player1, self.data_player1.keys()), (self.data_player2, self.data_player2.keys())]:
+			for k in list(key):
+				data[k] = []

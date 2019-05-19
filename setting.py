@@ -5,12 +5,13 @@ setting = {
 	"l_ecran": 1200,
 	"titre": "STREET FIGHTER",
 	"fps": 120,
+	"slow_fps": 30,
 
 	"speed": 3.5,
 	"delai_reset_touche": 0.15,
 	"cooldown_attaque": 0.5,
 	"degat": 50,
-	"vie": 1000,
+	"vie": 500,
 
 
 	"touche_joueur2": {
