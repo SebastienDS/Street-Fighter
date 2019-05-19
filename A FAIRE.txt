@@ -11,17 +11,18 @@ X		1v1
 /		1vsIA (IA + en + forte)
 		IA vs IA (X)
 X	menu choix perso
-	menu choix map (chaque personne choisi + choix aleatoire entre les deux map voté)
+X	menu choix map (chaque personne choisi + choix aleatoire entre les deux map voté)
 /	menu fin de partie 
 X		ajouter image perso sur lecran + encadré le vainqueur
 X	IA
 /	son
+		-son attaques
 	animations (X)
 	ajouter de nouvelles attaques
 4	ajouter nouveaux perso
 
 
-	barre de vie: 
+X	barre de vie: 
 X		-barre de vie trop basse a 0
 X		 => si attaque entre temps => reset la barre de degat pris + augmentation des degats ? (combo)
 
@@ -31,7 +32,8 @@ X	position de fin a la place du sleep
 
 
 	TUTORIEL 			<===============
-	REPLAY DE LA PARTIE <===============
+/	REPLAY DE LA PARTIE <===============
+		-ajouter plusieurs emplacements de sauvegarde + choisir quel replay regarder
 
 
 
