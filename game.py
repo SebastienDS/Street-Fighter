@@ -36,6 +36,7 @@ def main():
 	init_timer_debut = False
 	mode = False
 	menu_replay = False
+	choix_replay = False
 	menu_pause = False
 	menu_fin_partie = False
 
@@ -95,7 +96,7 @@ def main():
 								mode = "1vsIA"
 							elif interface.rect_replay.collidepoint(event.pos):
 								menu_choix_mode = False
-								menu_replay = True
+								choix_replay = True
 						except Exception as e:
 							print(e)
 
@@ -315,12 +316,12 @@ def main():
 
 		if menu_replay:
 			try:
-				replay.load_replay("test", interface, joueur1, joueur2)
+				replay.load_replay("replay" + str(replay.replay_selected), interface, joueur1, joueur2)
 			except Exception as e:
 				print(e)
 				joueur1 = Player.Player(ecran, "ken", 1, setting["speed"], (0,0,255))
 				joueur2 = Player.Player(ecran, "ken", 2, setting["speed"], (255,0,0))
-				replay.load_replay("test", interface, joueur1, joueur2)
+				replay.load_replay("replay" + str(replay.replay_selected), interface, joueur1, joueur2)
 			interface.transition((255,255,255))
 			pygame.mixer.music.fadeout(250)	
 			interface.timer_debut_partie(joueur1, joueur2)
@@ -352,8 +353,8 @@ def main():
 			joueur1.draw()
 			joueur2.draw()
 
-
 			pygame.display.flip()
+
 			if len(replay.data_player1["posX"]) > 80:
 				pygame.time.Clock().tick(setting["fps"])
 			else:
@@ -362,6 +363,7 @@ def main():
 			if joueur1.vie <= 0 or joueur2.vie <= 0:
 				menu_fin_partie = True
 				menu_replay = False
+				replay.replay_selected = None
 
 				interface.afficher_fin_de_partie(joueur1, joueur2)
 				if joueur1.vie > joueur2.vie:
@@ -369,7 +371,6 @@ def main():
 				else:
 					interface.transition(joueur2.couleur)
 		pygame.mixer.music.fadeout(250)
-
 
 
 		if menu_fin_partie:
@@ -407,14 +408,50 @@ def main():
 
 							elif interface.rect_save.collidepoint(event.pos):
 								if len(replay.data_player1["posX"]):
-									replay.save_replay("test", interface.num_map, joueur1.nom, joueur2.nom)
-									couleur_save = (0,255,0)
+									menu_fin_partie = False
+									choix_replay = "save"
 
 						except Exception as e: 
 							print(e)
 
 			interface.fin_de_partie(joueur1, joueur2, couleur_save)
 			pygame.display.flip()
+
+
+		while choix_replay:
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					sys.exit()
+				if event.type == pygame.KEYDOWN:
+					if event.key == son.son["volume"]["volume_up"]:
+						son.modif_volume(0.1)
+					elif event.key == son.son["volume"]["volume_down"]:
+						son.modif_volume(-0.1)
+
+				if event.type == pygame.MOUSEBUTTONDOWN:
+					if event.button == 1:
+						try:
+							if interface.r_replay1.collidepoint(event.pos):
+								replay.replay_selected = 1
+							elif interface.r_replay2.collidepoint(event.pos):
+								replay.replay_selected = 2
+							elif interface.r_replay3.collidepoint(event.pos):
+								replay.replay_selected = 3
+							elif interface.bouton_ok.collidepoint(event.pos) and replay.replay_selected:
+								if choix_replay == "save":
+									replay.save_replay("replay" + str(replay.replay_selected), interface.num_map, joueur1.nom, joueur2.nom)
+									choix_replay = False
+									menu_principal = True
+									replay.replay_selected = None
+								else:
+									choix_replay = False
+									menu_replay = True
+						except Exception as e:
+							print(e)
+
+			interface.choix_replay(replay)
+			pygame.display.flip()
+
 
 
 

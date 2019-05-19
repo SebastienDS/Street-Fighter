@@ -4,6 +4,7 @@ import time
 
 class Replay:
 	def __init__(self):
+		self.replay_selected = None
 		self.data_player1 = {
 			"posX": [],
 			"posY": [],

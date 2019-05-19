@@ -500,5 +500,48 @@ class Interface:
 		self.ecran.blit(replay, rect_replay)
 
 
+	def choix_replay(self, replay):
+		if replay.replay_selected:
+			couleur = (0,255,0)
+		else:
+			couleur = (255,255,255)
+		self.ecran.fill((0,0,0))
+		rect_ecran = self.ecran.get_rect()
+		choix_replay = self.font_menu.render("choix replay", 1, (0,255,255))
+		replay1 = self.font_menu.render("replay 1", 1, (255,255,255))
+		replay2 = self.font_menu.render("replay 2", 1, (255,255,255))
+		replay3 = self.font_menu.render("replay 3", 1, (255,255,255))
+		bouton_ok = self.font_barre_vie.render("valider", 1, couleur)
+
+		r_choix_replay = choix_replay.get_rect()
+		self.r_replay1 = replay1.get_rect()
+		self.r_replay2 = replay2.get_rect()
+		self.r_replay3 = replay3.get_rect()
+		self.bouton_ok = bouton_ok.get_rect()
+
+		r_choix_replay.centerx = rect_ecran.centerx
+		r_choix_replay.y = 50
+		self.bouton_ok.centerx = rect_ecran.centerx
+		self.bouton_ok.bottom = rect_ecran.bottom - 35
+
+		for rect_replay in [self.r_replay1, self.r_replay2, self.r_replay3]:
+			rect_replay.centery = rect_ecran.centery + 50
+		self.r_replay1.x = 50
+		self.r_replay2.centerx = rect_ecran.centerx
+		self.r_replay3.right = rect_ecran.right - 50
+
+		pygame.draw.rect(self.ecran, (255,255,255), self.r_replay1, 2)
+		pygame.draw.rect(self.ecran, (255,255,255), self.r_replay2, 2)
+		pygame.draw.rect(self.ecran, (255,255,255), self.r_replay3, 2)
+
+		self.ecran.blit(choix_replay, r_choix_replay)
+		self.ecran.blit(replay1, self.r_replay1)
+		self.ecran.blit(replay2, self.r_replay2)
+		self.ecran.blit(replay3, self.r_replay3)
+
+		pygame.draw.rect(self.ecran, couleur, self.bouton_ok, 2)
+		self.ecran.blit(bouton_ok, self.bouton_ok)
+
+
 
 	
