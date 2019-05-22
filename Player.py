@@ -57,10 +57,10 @@ class Player:
 		self.ecran.blit(self.image_active, self.rect_image)
 		self.afficher_triangle()
 		"""for i in self.hit_box_active:
-			pygame.draw.rect(self.ecran, (0,0,255), i, 5)	
+			pygame.draw.rect(self.ecran, (0,0,255), i, 2)	
 		if self.attaque_hit_box:
 			for i in self.attaque_hit_box:
-				pygame.draw.rect(self.ecran, (255,0,0), i, 5)"""
+				pygame.draw.rect(self.ecran, (255,0,0), i, 2)"""
 			
 		
 	def charger_images(self):

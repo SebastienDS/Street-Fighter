@@ -190,6 +190,10 @@ def main():
 						son.modif_volume(0.1)
 					elif event.key == son.son["volume"]["volume_down"]:
 						son.modif_volume(-0.1)
+					if event.key == pygame.K_ESCAPE:
+						choix_map = False
+						selecteur_perso = True
+						mode = False
 
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					if event.button == 1: 
@@ -243,6 +247,9 @@ def main():
 					if event.key in [setting["touche_joueur1"]["pause"], setting["touche_joueur2"]["pause"]]:
 						menu_pause = True
 						mode = False
+					if event.key == pygame.K_ESCAPE:
+						mode = False
+						menu_choix_mode = True
 
 				joueur1.input_player(event)
 				joueur2.input_player(event)
@@ -342,6 +349,9 @@ def main():
 						son.modif_volume(0.1)
 					elif event.key == son.son["volume"]["volume_down"]:
 						son.modif_volume(-0.1)
+					if event.key == pygame.K_ESCAPE:
+						menu_replay = False
+						choix_replay = True
 
 			replay.load_data(joueur1, joueur2)
 			joueur1.recup_action_active()													
