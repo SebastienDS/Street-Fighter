@@ -23,6 +23,7 @@ class Interface:
 		self.validation = [False, False]
 		self.choix_actif = "joueur1"
 		self.init_ia = False
+		self.box_tuto = []
 
 		self.init_interface()
 
@@ -107,28 +108,35 @@ class Interface:
 		self.rect_choix.centerx = rect_ecran.centerx
 		self.rect_choix.y = 50
 
-		duo = self.font_menu.render("1 vs 1", 1, (0,0,255))
+		duo = self.myfont.render("1 vs 1", 1, (0,0,255))
 		self.rect_1v1 = duo.get_rect()
 		self.rect_1v1.x = 100
 		self.rect_1v1.centery = rect_ecran.centery + 100
 
-		solo = self.font_menu.render("1 vs IA", 1, (0,0,255))
+		solo = self.myfont.render("1 vs IA", 1, (0,0,255))
 		self.rect_1vsIA = solo.get_rect()
-		self.rect_1vsIA.centerx = rect_ecran.centerx
+		self.rect_1vsIA.centerx = rect_ecran.centerx - 150
 		self.rect_1vsIA.centery = rect_ecran.centery + 100
 
-		replay = self.font_menu.render("replay", 1, (0,0,0))
+		replay = self.myfont.render("replay", 1, (0,0,0))
 		self.rect_replay = replay.get_rect()
-		self.rect_replay.right = rect_ecran.right - 100
+		self.rect_replay.centerx = rect_ecran.centerx + 150
 		self.rect_replay.centery = rect_ecran.centery + 100
+
+		tuto = self.myfont.render("tutoriel", 1, (0,0,0))
+		self.rect_tuto = tuto.get_rect()
+		self.rect_tuto.right = rect_ecran.right - 100
+		self.rect_tuto.centery = rect_ecran.centery + 100
 
 		pygame.draw.rect(self.ecran, (0,0,0), self.rect_1v1, 2)
 		pygame.draw.rect(self.ecran, (0,0,0), self.rect_1vsIA, 2)
 		pygame.draw.rect(self.ecran, (0,0,0), self.rect_replay, 2)
+		pygame.draw.rect(self.ecran, (0,0,0), self.rect_tuto, 2)
 		self.ecran.blit(choix, self.rect_choix)
 		self.ecran.blit(duo, self.rect_1v1)
 		self.ecran.blit(solo, self.rect_1vsIA)
 		self.ecran.blit(replay, self.rect_replay)
+		self.ecran.blit(tuto, self.rect_tuto)
 
 
 	def menu_pause(self):
@@ -541,6 +549,29 @@ class Interface:
 
 		pygame.draw.rect(self.ecran, couleur, self.bouton_ok, 2)
 		self.ecran.blit(bouton_ok, self.bouton_ok)
+
+
+	def create_box(self, nbr):
+		taille_box = 50
+		for i in range(nbr):
+			x = random.randrange(self.ecran.get_rect().width - taille_box)
+			bas = self.ecran.get_rect().height - taille_box
+			y = bas - random.choice([0, 50, 100, 150, 200, 250])
+			rect = pygame.Rect(x, y, taille_box, taille_box)
+			self.box_tuto.append(rect)
+
+
+	def gerer_box_tuto(self, joueur):
+		if joueur.attaque_hit_box:
+			for hit_box in (joueur.attaque_hit_box):
+				x, y, w, h = hit_box
+				rect = pygame.Rect(x, y, w, h)
+				try:
+					if rect.colliderect(self.box_tuto[0]):
+						self.box_tuto.pop(0)
+				except Exception as e:
+					print(e)
+
 
 
 

@@ -39,6 +39,8 @@ def main():
 	choix_replay = False
 	menu_pause = False
 	menu_fin_partie = False
+	tuto = False
+
 
 	while continuer:
 		if menu_principal or menu_choix_mode:
@@ -93,10 +95,13 @@ def main():
 							elif interface.rect_1vsIA.collidepoint(event.pos):
 								menu_choix_mode = False
 								selecteur_perso = True
-								mode = "1vsIA"
+								mode = "1vsIA"						
 							elif interface.rect_replay.collidepoint(event.pos):
 								menu_choix_mode = False
 								choix_replay = True
+							elif interface.rect_tuto.collidepoint(event.pos):
+								menu_choix_mode = False
+								tuto = True
 						except Exception as e:
 							print(e)
 
@@ -229,10 +234,9 @@ def main():
 				pygame.mixer.music.fadeout(250)
 				pygame.mixer.music.load(musique)
 				pygame.mixer.music.set_volume(son.son["volume"]["volume"])
-				pygame.mixer.music.play()
+				pygame.mixer.music.play(-1)
 			except Exception as e:
-				print(e)
-
+				print(e)		
 		while mode:
 			for event in pygame.event.get():					
 				if event.type == pygame.QUIT:
@@ -254,7 +258,7 @@ def main():
 				joueur1.input_player(event)
 				joueur2.input_player(event)
 
-			
+
 
 			joueur1.recup_action_active()													
 			joueur2.recup_action_active()
@@ -275,6 +279,7 @@ def main():
 			interface.barre_de_vie(joueur1, joueur2)
 			joueur1.draw()
 			joueur2.draw()
+			
 			interface.afficher_combo(joueur1, 50, 75)
 			interface.afficher_combo(joueur2, 900, 75)
 			quitter = interface.temps()
@@ -472,6 +477,59 @@ def main():
 
 			interface.choix_replay(replay)
 			pygame.display.flip()
+
+
+
+
+
+
+		if tuto:
+			interface.transition((255,255,255))
+			musique = son.son["map"][random.choice(list(son.son["map"].keys()))]
+			try:
+				pygame.mixer.music.fadeout(250)
+				pygame.mixer.music.load(musique)
+				pygame.mixer.music.set_volume(son.son["volume"]["volume"])
+				pygame.mixer.music.play(-1)
+			except Exception as e:
+				print(e)	
+			interface.create_box(15)
+			joueur1 = Player.Player(ecran, "ken", 1, setting["speed"], (0,0,255))		
+			interface.num_map = 1
+		while tuto:
+			for event in pygame.event.get():					
+				if event.type == pygame.QUIT:
+					sys.exit()
+				elif event.type == pygame.KEYDOWN:
+					if event.key == son.son["volume"]["volume_up"]:
+						son.modif_volume(0.1)
+						musique.set_volume(son.son["volume"]["volume"])
+					elif event.key == son.son["volume"]["volume_down"]:
+						son.modif_volume(-0.1)
+						musique.set_volume(son.son["volume"]["volume"])
+					if event.key == pygame.K_ESCAPE:
+						tuto = False
+						menu_choix_mode = True
+
+				joueur1.input_player(event)
+
+			joueur1.recup_action_active()
+			joueur1.update_hit_box(joueur1)		
+														
+
+			interface.draw_bg()
+			joueur1.draw()
+			pygame.draw.rect(ecran, (0,255,0), interface.box_tuto[0])
+			interface.gerer_box_tuto(joueur1)
+
+			pygame.display.flip()
+			pygame.time.Clock().tick(setting["fps"])
+
+			if not len(interface.box_tuto):
+				tuto = False
+				menu_choix_mode = True
+				interface.transition((255,255,255))
+		pygame.mixer.music.fadeout(250)
 
 
 
