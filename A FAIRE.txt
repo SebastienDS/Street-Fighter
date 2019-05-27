@@ -37,6 +37,10 @@ X		-ajouter plusieurs emplacements de sauvegarde + choisir quel replay regarder
 X		-ajouter son dans le menu du replay
 
 
+	finir interface entrainement avec surtout temps + best temps 
+		-a la fin afficher en gros le temps actuel et et le record (peut etre montrer temps de difference ?)
+
+
 
 
 

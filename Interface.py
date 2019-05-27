@@ -106,27 +106,27 @@ class Interface:
 		choix = self.font_menu.render("choix mode de jeu", 1, (0,0,0))
 		self.rect_choix = choix.get_rect()
 		self.rect_choix.centerx = rect_ecran.centerx
-		self.rect_choix.y = 50
+		self.rect_choix.y = 40
 
-		duo = self.myfont.render("1 vs 1", 1, (0,0,255))
+		duo = self.myfont.render("2 joueurs", 1, (0,0,255))
 		self.rect_1v1 = duo.get_rect()
-		self.rect_1v1.x = 100
-		self.rect_1v1.centery = rect_ecran.centery + 100
+		self.rect_1v1.x = 350
+		self.rect_1v1.centery = rect_ecran.centery + 60
 
-		solo = self.myfont.render("1 vs IA", 1, (0,0,255))
+		solo = self.myfont.render("1 joueur", 1, (0,0,255))
 		self.rect_1vsIA = solo.get_rect()
-		self.rect_1vsIA.centerx = rect_ecran.centerx - 150
-		self.rect_1vsIA.centery = rect_ecran.centery + 100
+		self.rect_1vsIA.x = 50
+		self.rect_1vsIA.centery = rect_ecran.centery + 60
 
 		replay = self.myfont.render("replay", 1, (0,0,0))
 		self.rect_replay = replay.get_rect()
-		self.rect_replay.centerx = rect_ecran.centerx + 150
-		self.rect_replay.centery = rect_ecran.centery + 100
+		self.rect_replay.x = rect_ecran.centerx + 80
+		self.rect_replay.centery = rect_ecran.centery + 120
 
 		tuto = self.myfont.render("tutoriel", 1, (0,0,0))
 		self.rect_tuto = tuto.get_rect()
-		self.rect_tuto.right = rect_ecran.right - 100
-		self.rect_tuto.centery = rect_ecran.centery + 100
+		self.rect_tuto.right = rect_ecran.right - 50
+		self.rect_tuto.centery = rect_ecran.centery + 120
 
 		pygame.draw.rect(self.ecran, (0,0,0), self.rect_1v1, 2)
 		pygame.draw.rect(self.ecran, (0,0,0), self.rect_1vsIA, 2)
@@ -571,6 +571,64 @@ class Interface:
 						self.box_tuto.pop(0)
 				except Exception as e:
 					print(e)
+
+
+	def aide(self):
+		rect_ecran = self.ecran.get_rect()
+
+		aide = self.font_menu.render("aide", 1, (0,255,0))
+		rect_aide = aide.get_rect()
+		rect_aide.centerx = rect_ecran.centerx
+		rect_aide.y = 75
+		self.ecran.blit(aide, rect_aide)
+
+		for num, i in [(1, 125), (2, 775)]:
+			joueur = self.myfont.render("joueur " + str(num), 1, (0,0,0))
+			rect_joueur = joueur.get_rect()
+			rect_joueur.x = i
+			self.ecran.blit(joueur, rect_joueur)
+
+		for joueur, couleur, alignement in [("aide_joueur1", (0,0,255), 0), ("aide_joueur2", (255,0,0), 650)]:
+			touche_perso = []
+			action_touche = []
+			for key in setting[joueur].keys():
+				touche_perso.append(key)
+			for action in setting["touche_joueur1"].keys():
+				action_touche.append(action)
+			for i in range(len(touche_perso)):
+				action = self.font_barre_vie.render(f"{action_touche[i]}:", 1, couleur)
+				rect = action.get_rect()
+				rect.x = 100 + alignement
+				rect.y = 100 + i * 30
+				self.ecran.blit(action, rect)
+
+				touche = self.font_barre_vie.render(setting[joueur][touche_perso[i]], 1, (0,0,0))
+				rect_touche = touche.get_rect()
+				rect_touche.x = rect.x + 175
+				rect_touche.y = 100 + i * 30
+				self.ecran.blit(touche, rect_touche)
+
+
+	def bouton_aide(self):
+		rect_ecran = self.ecran.get_rect()
+
+		retour = self.font_barre_vie.render("retour", 1, (0,0,0))
+		self.r_retour = retour.get_rect()
+		self.r_retour.left = rect_ecran.centerx 
+		self.r_retour.bottom = rect_ecran.bottom - 50
+		self.ecran.blit(retour, self.r_retour)
+		pygame.draw.rect(self.ecran, (0,0,0), self.r_retour, 2)
+
+		entrainement = self.font_barre_vie.render("entrainement", 1, (0,0,0))
+		self.r_entrainement = entrainement.get_rect()
+		self.r_entrainement.right = rect_ecran.centerx - 40
+		self.r_entrainement.bottom = rect_ecran.bottom - 50
+		self.ecran.blit(entrainement, self.r_entrainement)
+		pygame.draw.rect(self.ecran, (0,0,0), self.r_entrainement, 2)
+
+
+
+
 
 
 
