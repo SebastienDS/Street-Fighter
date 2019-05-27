@@ -519,6 +519,11 @@ def main():
 
 
 		if entrainement:
+			interface.create_box(15)
+			perso = random.choice(["ken", "ryu", "t_hawk", "cammy"])
+			joueur1 = Player.Player(ecran, perso, 1, setting["speed"], (0,0,255))
+			interface.num_map = random.randrange(1, 7)
+			interface.load_record()
 			interface.transition((255,255,255))
 			musique = son.son["map"][random.choice(list(son.son["map"].keys()))]
 			try:
@@ -528,9 +533,8 @@ def main():
 				pygame.mixer.music.play(-1)
 			except Exception as e:
 				print(e)	
-			interface.create_box(15)
-			joueur1 = Player.Player(ecran, "ken", 1, setting["speed"], (0,0,255))		
-			interface.num_map = 1
+			
+			interface.debut_entrainement = time.time()
 		while entrainement:
 			for event in pygame.event.get():					
 				if event.type == pygame.QUIT:
@@ -553,13 +557,18 @@ def main():
 														
 			interface.draw_bg()
 			joueur1.draw()
+			interface.tutoriel()
+			interface.nbr_box_restantes()
 			pygame.draw.rect(ecran, (0,255,0), interface.box_tuto[0])
 			interface.gerer_box_tuto(joueur1)
+			
 
 			pygame.display.flip()
 			pygame.time.Clock().tick(setting["fps"])
 
 			if not len(interface.box_tuto):
+				interface.temps_entrainement = time.time() - interface.debut_entrainement
+				interface.save_record()
 				entrainement = False
 				tutoriel = True
 				interface.transition((255,255,255))

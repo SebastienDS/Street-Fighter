@@ -24,6 +24,7 @@ class Interface:
 		self.choix_actif = "joueur1"
 		self.init_ia = False
 		self.box_tuto = []
+		self.record = None
 
 		self.init_interface()
 
@@ -401,15 +402,19 @@ class Interface:
 					son_compteur.play()
 				temps -= 1
 
-				self.draw_bg()
-				self.barre_de_vie(joueur1, joueur2)
-				joueur1.victory2()
-				joueur2.victory2()
-				joueur1.draw()
-				joueur2.draw()
+				self.pos_debut_timer(joueur1, joueur2)
 				self.ecran.blit(t_temps, r_temps)
 				pygame.display.flip()
 
+
+	def pos_debut_timer(self, joueur1, joueur2):
+		self.draw_bg()
+		self.barre_de_vie(joueur1, joueur2)
+		joueur1.victory2()
+		joueur2.victory2()
+		joueur1.draw()
+		joueur2.draw()
+		
 
 	def afficher_fin_de_partie(self, joueur1, joueur2):
 		temps = 5
@@ -553,6 +558,7 @@ class Interface:
 
 	def create_box(self, nbr):
 		taille_box = 50
+		self.box_tuto = []
 		for i in range(nbr):
 			x = random.randrange(self.ecran.get_rect().width - taille_box)
 			bas = self.ecran.get_rect().height - taille_box
@@ -625,6 +631,56 @@ class Interface:
 		self.r_entrainement.bottom = rect_ecran.bottom - 50
 		self.ecran.blit(entrainement, self.r_entrainement)
 		pygame.draw.rect(self.ecran, (0,0,0), self.r_entrainement, 2)
+
+
+	def tutoriel(self):
+		rect_ecran = self.ecran.get_rect()
+
+		tuto = self.myfont.render("entrainement", 1, (255,0,128))
+		r_tuto = tuto.get_rect()
+		r_tuto.centerx = rect_ecran.centerx
+		r_tuto.y = 10
+		self.ecran.blit(tuto, r_tuto)
+	
+		if time.time() - self.debut_entrainement < self.record:
+			couleur = (0,0,255)
+		else:
+			couleur = (255,0,0)
+		mon_temps = self.myfont.render(f"Temps: {round(time.time() - self.debut_entrainement, 3)}", 1, couleur)
+		r_temps = mon_temps.get_rect()
+		r_temps.x = 50
+		r_temps.y = 75
+		self.ecran.blit(mon_temps, r_temps)
+
+		temps_record = self.myfont.render(f"record: {self.record}", 1, couleur)
+		r_record = temps_record.get_rect()
+		r_record.right = rect_ecran.right - 50
+		r_record.y = 75
+		self.ecran.blit(temps_record, r_record)
+
+
+	def nbr_box_restantes(self):
+		rect_ecran = self.ecran.get_rect()
+
+		nbr = self.myfont.render(str(len(self.box_tuto)), 1, (0,255,0))
+		r_nbr = nbr.get_rect()
+		r_nbr.centerx = rect_ecran.centerx
+		r_nbr.y = 100
+		self.ecran.blit(nbr, r_nbr)
+
+
+	def save_record(self):
+		if self.temps_entrainement < self.record:
+			with open("record.txt", "w") as f:
+				f.write(str(self.temps_entrainement))
+
+
+	def load_record(self):
+		with open("record.txt") as f:
+			self.record = round(float(f.read()), 3)
+
+
+
 
 
 
