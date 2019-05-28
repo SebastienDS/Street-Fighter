@@ -511,8 +511,6 @@ def main():
 			pygame.display.flip()
 
 
-
-
 		if entrainement:
 			interface.create_box(15)
 			perso = random.choice(["ken", "ryu", "cammy"])
