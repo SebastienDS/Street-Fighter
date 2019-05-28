@@ -4,7 +4,7 @@ import Editeur
 
 def main():
 	pygame.init()
-	ecran = pygame.display.set_mode((800,800))
+	ecran = pygame.display.set_mode((300,500))
 	pygame.display.set_caption("Editeur de hit box")
 
 	editeur = Editeur.Editeur()

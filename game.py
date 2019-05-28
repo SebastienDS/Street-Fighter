@@ -247,10 +247,8 @@ def main():
 				elif event.type == pygame.KEYDOWN:
 					if event.key == son.son["volume"]["volume_up"]:
 						son.modif_volume(0.1)
-						musique.set_volume(son.son["volume"]["volume"])
 					elif event.key == son.son["volume"]["volume_down"]:
 						son.modif_volume(-0.1)
-						musique.set_volume(son.son["volume"]["volume"])
 					if event.key in [setting["touche_joueur1"]["pause"], setting["touche_joueur2"]["pause"]]:
 						menu_pause = True
 						mode = False
@@ -445,7 +443,6 @@ def main():
 						son.modif_volume(0.1)
 					elif event.key == son.son["volume"]["volume_down"]:
 						son.modif_volume(-0.1)
-
 					if event.key == pygame.K_ESCAPE:
 						if choix_replay == "save":
 							choix_replay = False
@@ -490,10 +487,8 @@ def main():
 				elif event.type == pygame.KEYDOWN:
 					if event.key == son.son["volume"]["volume_up"]:
 						son.modif_volume(0.1)
-						musique.set_volume(son.son["volume"]["volume"])
 					elif event.key == son.son["volume"]["volume_down"]:
 						son.modif_volume(-0.1)
-						musique.set_volume(son.son["volume"]["volume"])
 					if event.key == pygame.K_ESCAPE:
 						tutoriel = False
 						menu_choix_mode = True
@@ -542,10 +537,8 @@ def main():
 				elif event.type == pygame.KEYDOWN:
 					if event.key == son.son["volume"]["volume_up"]:
 						son.modif_volume(0.1)
-						musique.set_volume(son.son["volume"]["volume"])
 					elif event.key == son.son["volume"]["volume_down"]:
 						son.modif_volume(-0.1)
-						musique.set_volume(son.son["volume"]["volume"])
 					if event.key == pygame.K_ESCAPE:
 						entrainement = False
 						tutoriel = True
@@ -571,6 +564,7 @@ def main():
 				interface.save_record()
 				entrainement = False
 				tutoriel = True
+				time.sleep()
 				interface.transition((255,255,255))
 		pygame.mixer.music.fadeout(250)
 

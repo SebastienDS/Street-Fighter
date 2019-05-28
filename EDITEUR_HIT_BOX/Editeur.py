@@ -3,7 +3,7 @@ import json
 
 class Editeur:
 	def __init__(self):
-		self.nom = "t_hawk"
+		self.nom = "ryu"
 		self.sens = "left"
 		self.attaque = ""  #attaque_
 		self.direction = self.nom + "/"+ self.nom + "_" + self.sens
