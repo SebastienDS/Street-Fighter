@@ -515,7 +515,7 @@ def main():
 
 		if entrainement:
 			interface.create_box(15)
-			perso = random.choice(["ken", "ryu", "t_hawk", "cammy"])
+			perso = random.choice(["ken", "ryu", "cammy"])
 			joueur1 = Player.Player(ecran, perso, 1, setting["speed"], (0,0,255))
 			interface.num_map = random.randrange(1, 7)
 			interface.load_record()
@@ -551,9 +551,10 @@ def main():
 			interface.draw_bg()
 			joueur1.draw()
 			interface.tutoriel()
-			interface.nbr_box_restantes()
+			
 			pygame.draw.rect(ecran, (0,255,0), interface.box_tuto[0])
 			interface.gerer_box_tuto(joueur1)
+			interface.nbr_box_restantes()
 			
 
 			pygame.display.flip()
@@ -564,7 +565,7 @@ def main():
 				interface.save_record()
 				entrainement = False
 				tutoriel = True
-				time.sleep()
+				time.sleep(1)
 				interface.transition((255,255,255))
 		pygame.mixer.music.fadeout(250)
 
