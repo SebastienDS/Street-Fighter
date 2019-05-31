@@ -61,6 +61,7 @@ class Interface:
 
 
 	def temps(self):
+		"""afficher le timer en partie"""
 		if time.time() - self.debut > 1:
 			self.debut = time.time()
 			self.timer -= 1
@@ -166,6 +167,7 @@ class Interface:
 
 
 	def nom_barre_vie(self, joueur, couleur, position):
+		"""dessine le nom des joueurs sur la barre de vie"""
 		nom = self.font_barre_vie.render(joueur.nom, 1, couleur)
 		rect_nom = nom.get_rect()
 		rect_nom.center = position
@@ -297,6 +299,7 @@ class Interface:
 
 
 	def perso_selected(self):
+		"""si on clique sur un perso, il apparait en grand a coter"""
 		rect_ecran = self.ecran.get_rect()
 		if self.choix_perso_joueur[0]:
 			perso = pygame.transform.scale(self.logo_perso[self.choix_perso_joueur[0]], (160, 200))
@@ -314,6 +317,7 @@ class Interface:
 
 
 	def bouton_selecteur(self):
+		"""bouton joueur1 et joueur2 pouvant etre utiliser pour changer le choix actif si on souhaite selectionner le joueur2 en premier"""
 		rect_ecran = self.ecran.get_rect()
 		joueur1 = self.font_barre_vie.render("Joueur 1", 1, (0,0,255))
 		self.rect_joueur1 = joueur1.get_rect()
@@ -342,6 +346,7 @@ class Interface:
 
 
 	def bouton_validation(self):
+		"""bouton valider sous les grands image de perso, cadre vert quand le perso est valider"""
 		rect_ecran = self.ecran.get_rect()
 		valider = self.font_barre_vie.render("valider", 1, (255,255,255))
 		self.rect_valider1 = valider.get_rect()
@@ -365,6 +370,7 @@ class Interface:
 
 
 	def check_validation(self):
+		"""si les 2 perso sont validés, bouton OK apparait permet de lancer la partie"""
 		if self.validation.count(True) == 2 and not self.choix_perso_joueur.count(None):
 			rect_ecran = self.ecran.get_rect()
 			valider = self.font_barre_vie.render("OK", 1, (0,255,0))
@@ -376,11 +382,14 @@ class Interface:
 
 
 	def choix_perso_IA(self):
+		"""si le mode de jeu est 1 joueur, un perso pour le joueur2 est selectionné et validé automatiquement
+			(ce choix peut etre changer par le joueur1)"""
 		self.choix_perso_joueur[1] = random.choice(["ken", "ryu", "cammy", "t_hawk"])
 		self.validation[1] = True
 
 
 	def timer_debut_partie(self, joueur1, joueur2):
+		"""effectue le decompte de debut de partie"""
 		temps = 3
 		son_compteur = pygame.mixer.Sound(son.son["compteur"]["compteur" + str(temps)])
 		son_compteur.set_volume(son.son["volume"]["volume"])
@@ -408,6 +417,7 @@ class Interface:
 
 
 	def pos_debut_timer(self, joueur1, joueur2):
+		"""met les joueurs en position pour demarrer la partie"""
 		self.draw_bg()
 		self.barre_de_vie(joueur1, joueur2)
 		joueur1.victory2()
@@ -458,6 +468,7 @@ class Interface:
 
 
 	def choix_map(self):
+		"""dessine les map en diagonale pour le menu du choix des maps"""
 		self.rect_map = []
 		for i in range(len(self.icone_map.keys())):
 			rect = self.icone_map["map" + str(i + 1)].get_rect()
@@ -506,6 +517,7 @@ class Interface:
 
 
 	def afficher_replay(self):
+		"""affiche replay dans le jeu pour voir directement qu'un replay est en cours"""
 		replay = self.font_menu.render("Replay", 1, (255,0,128))
 		rect_replay = replay.get_rect()
 		rect_replay.center = self.ecran.get_rect().center
@@ -514,6 +526,7 @@ class Interface:
 
 
 	def choix_replay(self, replay):
+		"""3 bouton de replay pour choisir quel replay choisir"""
 		if replay.replay_selected:
 			couleur = (0,255,0)
 		else:
@@ -557,6 +570,7 @@ class Interface:
 
 
 	def create_box(self, nbr):
+		"""cree des carrés pour l'entrainement"""
 		taille_box = 50
 		self.box_tuto = []
 		for i in range(nbr):
@@ -568,6 +582,7 @@ class Interface:
 
 
 	def gerer_box_tuto(self, joueur):
+		"""test si l'attaque touche la box"""
 		if joueur.attaque_hit_box:
 			for hit_box in (joueur.attaque_hit_box):
 				x, y, w, h = hit_box
@@ -580,6 +595,7 @@ class Interface:
 
 
 	def aide(self):
+		"""menu aide avec affichage des touches de chaque joueurs"""
 		rect_ecran = self.ecran.get_rect()
 
 		aide = self.font_menu.render("aide", 1, (0,255,0))
@@ -634,6 +650,8 @@ class Interface:
 
 
 	def tutoriel(self):
+		"""affiche le temps actuel de l'entrainement ainsi que le record,
+			change la couleur de bleu a rouge si le temps est > au record"""
 		rect_ecran = self.ecran.get_rect()
 
 		tuto = self.myfont.render("entrainement", 1, (255,0,128))
@@ -660,6 +678,7 @@ class Interface:
 
 
 	def nbr_box_restantes(self):
+		"""affiche le nbr de box restantes a toucher"""
 		rect_ecran = self.ecran.get_rect()
 
 		nbr = self.myfont.render(str(len(self.box_tuto)), 1, (0,255,0))

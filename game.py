@@ -256,8 +256,8 @@ def main():
 						mode = False
 						menu_choix_mode = True
 
-				joueur1.input_player(event)
-				joueur2.input_player(event)
+				joueur1.input_player(event, joueur2)
+				joueur2.input_player(event, joueur1)
 
 			joueur1.recup_action_active()													
 			joueur2.recup_action_active()

@@ -104,6 +104,7 @@ class Player:
 
 
 	def charger_hit_box(self):
+		"""charge les hit_box du personnage"""
 		for key in self.image_perso.keys():
 			try:
 				if key[0] == "r":
@@ -143,7 +144,8 @@ class Player:
 				hit_box[i][j] = (x, y, w, h)
 
 
-	def agrandir_taille(self):					#conserve les bonnes proportions    
+	def agrandir_taille(self):					
+		"""agrandi les images et hit_box en conservant les bonnes proportions"""  
 		hauteur = int((setting["l_ecran"] * 448) / 1242)	
 		for key in self.image_perso.keys():
 			rect_image = self.image_perso[key].get_rect()
@@ -172,12 +174,14 @@ class Player:
 
 
 	def afficher_triangle(self):
+		"""cree le petit triangle au dessus des personnages afin de repérer le J1 et J2"""
 		posX = self.rect_image.centerx 
 		posY = self.rect_image.top - 20
 		pygame.draw.polygon(self.ecran, self.couleur, [(posX, posY), (posX - 10, posY - 15), (posX + 10, posY - 15)])
 
 
-	def pos_start(self, joueur):					#initialise les position de chaque joueur en debut de partie
+	def pos_start(self, joueur):	
+		"""initialise les position de chaque joueur en debut de partie"""
 		rect_ecran = self.ecran.get_rect()
 		hauteur = int((setting["l_ecran"] * 448) / 1242)
 		if joueur == 1:
@@ -201,6 +205,7 @@ class Player:
 
 
 	def update_hit_box(self, joueur):
+		"""associe l'hit_box a l'image active et la replace car hit_box sauvergarder au coordonnee (0,0) via L'éditeur"""
 		hauteur = int((setting["l_ecran"] * 448) / 1242)
 		self.hit_box_active = []
 		for i in range(len(self.hit_box_perso[self.ordre_hit_box[self.nom_image_active]])):
@@ -221,6 +226,8 @@ class Player:
 
 
 	def gerer_degat(self, ennemi):
+		"""test si il y attaque et inflige les degats si c'est le premier coup 
+			(pour avoir toujours les meme degats infligés et non selon le temps resté a toucher l'adversaire)"""
 		if self.premiere_attaque:
 			if self.attaque_hit_box:
 				for attaque in self.attaque_hit_box:
@@ -244,13 +251,15 @@ class Player:
 					self.debut_combo = time.time()
 
 
-	def placer_rect(self):								#recup taille image + placer l'image sur posX et posY
+	def placer_rect(self):	
+		"""recup taille image + placer l'image sur posX et posY"""
 		self.rect_image = self.image_active.get_rect()
 		self.rect_image.centerx = self.posX
 		self.rect_image.bottom = self.posY
 
 
-	def test_position_up(self):							#test la position du joueur pour choisir l'usage du jump
+	def test_position_up(self):	
+		"""test la position du joueur pour choisir l'action de la touche sauter"""
 		if self.position == "crouch":
 			self.position = "idle"
 			self.idle()
@@ -259,7 +268,8 @@ class Player:
 			self.jump()
 
 
-	def test_action(self):								# cancel l'action apres le delai dépassé
+	def test_action(self):								
+		"""cancel l'action apres le delai dépassé"""
 		if time.time() - self.debut_action < setting["delai_reset_touche"] * 1.5:
 			return True
 		else:
@@ -273,18 +283,21 @@ class Player:
 
 
 	def demander_attaque(self, attaque):
+		"""envoie l'attaque si la durée entre les attaques a été depassé pour ne pas spammer le touche et rester en position attaque toute la partie"""
 		if time.time() - self.debut_action > setting["cooldown_attaque"]:
 			self.action = attaque
 			self.debut_action = time.time()
 
 
 	def reset_combo(self):
-		if time.time() - self.debut_combo > 1:
+		"""remet le combo a 0 et les degats d'origine si 1.5s est passé avant d'avoir retoucher l'adversaire"""
+		if time.time() - self.debut_combo > 1.5:
 			self.combo = 0
 			self.degat = setting["degat"]
 
 
-	def input_player(self, event):
+	def input_player(self, event, *args):
+		"""recuperere les input du joueur et change les variables de direction position et action"""
 		if event.type == pygame.KEYDOWN:
 			if event.key == setting["touche_joueur" + str(self.num_joueur)]["right"]:						#DIRECTION
 				self.direction = "right"
@@ -333,7 +346,8 @@ class Player:
 				self.action = None
 
 
-	def recup_action_active(self):						#recupere les action du joueur pour choisir les bonnes attaques selon les combos de touches
+	def recup_action_active(self):						
+		"""recupere les action du joueur pour choisir les bonnes attaques selon direction, position et action"""
 		if self.direction == "idle" and self.position == "idle" and not self.action:
 			self.idle()
 			return

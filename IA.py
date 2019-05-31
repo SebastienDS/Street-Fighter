@@ -10,17 +10,25 @@ class IA(Player.Player):
 		self.temporisation_mouvement = time.time() - 10
 
 
-	def input_player(self, event):  
+	def input_player(self, event, joueur):  
+		"""choisi une direction ou un saut"""
 		if time.time() - self.temporisation_mouvement > 0.2:
 			aleatoire = random.randrange(111)
 			if aleatoire <= 40:
 				self.direction = "idle"
-			elif aleatoire > 40 and aleatoire <= 70:
-				self.direction = "left"
-				self.last_direction = "left"
-			elif aleatoire > 70 and aleatoire <= 100:
-				self.direction = "right"
-				self.last_direction = "right"
+			if aleatoire > 40 and aleatoire <= 110:
+				if self.posX - joueur.posX >= 400:
+					self.direction = "left"
+					self.last_direction = "left"
+				elif self.posX - joueur.posX <= -400:
+					self.direction = "right"
+					self.last_direction = "right"
+				elif aleatoire > 40 and aleatoire <= 70:
+					self.direction = "left"
+					self.last_direction = "left"
+				elif aleatoire > 70 and aleatoire <= 100:
+					self.direction = "right"
+					self.last_direction = "right"
 			if aleatoire > 100 and aleatoire <= 110:
 				if self.position not in ["jump_up", "jump_down"]:
 					self.position = "jump_up"
@@ -29,6 +37,7 @@ class IA(Player.Player):
 
 
 	def tester_degat(self, joueur):
+		"""test si on touche lors d'une attaque pour par la suite attaquer lorsqu'on touche"""
 		for ordre_attaque in self.ordre_attaque_hit_box.values():
 			attaque = self.hit_box_attaque_perso[ordre_attaque]
 			for i in attaque:
@@ -47,6 +56,7 @@ class IA(Player.Player):
 
 
 	def tester_toucher(self, joueur):
+		"""test si l'adversaire touche pour pouvoir bloquer l'attaque"""
 		if joueur.attaque_hit_box:
 			for attaque in joueur.attaque_hit_box:
 				n_attaque_hit_box = pygame.Rect(attaque[0], attaque[1], attaque[2], attaque[3])
