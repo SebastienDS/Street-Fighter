@@ -91,8 +91,8 @@ class Interface:
 		self.rect_quit.right = rect_ecran.right - 200
 		self.rect_quit.centery = rect_ecran.centery + 100
 
-		pygame.draw.rect(self.ecran, (0,0,0), self.rect_play, 2)
-		pygame.draw.rect(self.ecran, (0,0,0), self.rect_quit, 2)
+		pygame.draw.rect(self.ecran, (0,0,0), self.rect_play, 1)
+		pygame.draw.rect(self.ecran, (0,0,0), self.rect_quit, 1)
 		self.ecran.blit(play, self.rect_play)
 		self.ecran.blit(quit, self.rect_quit)
 
@@ -130,10 +130,10 @@ class Interface:
 		self.rect_tuto.right = rect_ecran.right - 50
 		self.rect_tuto.centery = rect_ecran.centery + 120
 
-		pygame.draw.rect(self.ecran, (0,0,0), self.rect_1v1, 2)
-		pygame.draw.rect(self.ecran, (0,0,0), self.rect_1vsIA, 2)
-		pygame.draw.rect(self.ecran, (0,0,0), self.rect_replay, 2)
-		pygame.draw.rect(self.ecran, (0,0,0), self.rect_tuto, 2)
+		pygame.draw.rect(self.ecran, (0,0,0), self.rect_1v1, 1)
+		pygame.draw.rect(self.ecran, (0,0,0), self.rect_1vsIA, 1)
+		pygame.draw.rect(self.ecran, (0,0,0), self.rect_replay, 1)
+		pygame.draw.rect(self.ecran, (0,0,0), self.rect_tuto, 1)
 		self.ecran.blit(choix, self.rect_choix)
 		self.ecran.blit(duo, self.rect_1v1)
 		self.ecran.blit(solo, self.rect_1vsIA)
@@ -159,8 +159,8 @@ class Interface:
 		self.rect_quitter.right = rect_ecran.right - 150
 		self.rect_quitter.centery = rect_ecran.centery + 100
 
-		pygame.draw.rect(self.ecran, (255,255,0), self.rect_continuer, 2)
-		pygame.draw.rect(self.ecran, (255,255,0), self.rect_quitter, 2)
+		pygame.draw.rect(self.ecran, (255,255,0), self.rect_continuer, 1)
+		pygame.draw.rect(self.ecran, (255,255,0), self.rect_quitter, 1)
 		self.ecran.blit(pause, self.rect_pause)
 		self.ecran.blit(continuer, self.rect_continuer)
 		self.ecran.blit(quitter, self.rect_quitter)
@@ -210,8 +210,8 @@ class Interface:
 		self.rect_quit.right = rect_ecran.right - 100
 		self.rect_quit.centery = rect_ecran.centery + 125
 
-		pygame.draw.rect(self.ecran, (255,255,255), self.rect_menu, 2)
-		pygame.draw.rect(self.ecran, (255,255,255), self.rect_quit, 2)
+		pygame.draw.rect(self.ecran, (255,255,255), self.rect_menu, 1)
+		pygame.draw.rect(self.ecran, (255,255,255), self.rect_quit, 1)
 		self.ecran.blit(menu, self.rect_menu)
 		self.ecran.blit(quit, self.rect_quit)
 
@@ -251,7 +251,7 @@ class Interface:
 		self.rect_save = save.get_rect()
 		self.rect_save.centerx = rect_ecran.centerx
 		self.rect_save.centery = rect_ecran.centery + 125
-		pygame.draw.rect(self.ecran, couleur_save, self.rect_save, 2)
+		pygame.draw.rect(self.ecran, couleur_save, self.rect_save, 1)
 		self.ecran.blit(save, self.rect_save)
 
 
@@ -556,16 +556,16 @@ class Interface:
 		self.r_replay2.centerx = rect_ecran.centerx
 		self.r_replay3.right = rect_ecran.right - 50
 
-		pygame.draw.rect(self.ecran, (255,255,255), self.r_replay1, 2)
-		pygame.draw.rect(self.ecran, (255,255,255), self.r_replay2, 2)
-		pygame.draw.rect(self.ecran, (255,255,255), self.r_replay3, 2)
+		pygame.draw.rect(self.ecran, (255,255,255), self.r_replay1, 1)
+		pygame.draw.rect(self.ecran, (255,255,255), self.r_replay2, 1)
+		pygame.draw.rect(self.ecran, (255,255,255), self.r_replay3, 1)
 
 		self.ecran.blit(choix_replay, r_choix_replay)
 		self.ecran.blit(replay1, self.r_replay1)
 		self.ecran.blit(replay2, self.r_replay2)
 		self.ecran.blit(replay3, self.r_replay3)
 
-		pygame.draw.rect(self.ecran, couleur, self.bouton_ok, 2)
+		pygame.draw.rect(self.ecran, couleur, self.bouton_ok, 1)
 		self.ecran.blit(bouton_ok, self.bouton_ok)
 
 
@@ -639,14 +639,14 @@ class Interface:
 		self.r_retour.left = rect_ecran.centerx 
 		self.r_retour.bottom = rect_ecran.bottom - 50
 		self.ecran.blit(retour, self.r_retour)
-		pygame.draw.rect(self.ecran, (0,0,0), self.r_retour, 2)
+		pygame.draw.rect(self.ecran, (0,0,0), self.r_retour, 1)
 
 		entrainement = self.font_barre_vie.render("entrainement", 1, (0,0,0))
 		self.r_entrainement = entrainement.get_rect()
 		self.r_entrainement.right = rect_ecran.centerx - 40
 		self.r_entrainement.bottom = rect_ecran.bottom - 50
 		self.ecran.blit(entrainement, self.r_entrainement)
-		pygame.draw.rect(self.ecran, (0,0,0), self.r_entrainement, 2)
+		pygame.draw.rect(self.ecran, (0,0,0), self.r_entrainement, 1)
 
 
 	def tutoriel(self):
